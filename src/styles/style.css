@@ -1,0 +1,22 @@
+#sendBtn{
+-fx-background-color: black;
+-fx-border-color: black;
+-fx-text-fill: white;
+-fx-border-style: solid;
+}
+
+#sendBtn:hover{
+-fx-background-color: deepskyblue;
+-fx-border-color: black;
+-fx-text-fill: white;
+-fx-border-style: solid;
+}
+
+#bottomPanel{
+-fx-background-color: grey;
+}
+
+#upperPanel{
+-fx-background-color: black;
+}
+
