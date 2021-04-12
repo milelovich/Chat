@@ -32,7 +32,6 @@ public class AuthService {
         }
         return null;
     }
-
     public static void disconnect(){
         try {
             connection.close();

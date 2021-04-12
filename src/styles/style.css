@@ -4,7 +4,6 @@
 -fx-text-fill: white;
 -fx-border-style: solid;
 }
-
 #sendBtn:hover{
 -fx-background-color: deepskyblue;
 -fx-border-color: black;

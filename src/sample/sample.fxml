@@ -29,7 +29,6 @@
             <Insets left="11.0" right="22.0" />
          </HBox.margin></Button>
    </HBox>
-
    <children>
       <TextArea fx:id="textArea" prefHeight="231.0" prefWidth="486.0">
          <font>

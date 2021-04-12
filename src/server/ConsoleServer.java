@@ -83,7 +83,6 @@ public class ConsoleServer {
         } return false;
 
     }
-
     public void sendPrivateMsg(ClientHandler nickFrom, String nickTo, String msg) {
         for (ClientHandler c : users){
             if (c.getNickname().equals(nickTo)){
