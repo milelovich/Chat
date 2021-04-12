@@ -96,7 +96,6 @@ public class Controller {
                         textArea.appendText(str + "\n");
                     }
                 }
-
                 while (true){
                     String str = in.readUTF();
                     if("/serverClosed".equals(str)){

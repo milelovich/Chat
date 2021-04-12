@@ -44,7 +44,6 @@ public class ClientHandler {
                             }
                         }
                     }
-
                     while (true) {
                         String str = in.readUTF();
                         if (str.startsWith("/") || str.startsWith("@")) {
