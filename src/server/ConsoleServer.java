@@ -75,22 +75,22 @@ public class ConsoleServer {
     }
     }
 
-//    public boolean isNickBusy(String nick){
-//        for (ClientHandler c : users){
-//            if (c.getNickname().equals(nick)){
-//                return true;
-//            }
-//        } return false;
-//
-//    }
-//    public void sendPrivateMsg(ClientHandler nickFrom, String nickTo, String msg) {
-//        for (ClientHandler c : users){
-//            if (c.getNickname().equals(nickTo)){
-//                if (!nickFrom.getNickname().equals(nickTo)){
-//                    c.sendMsg(nickFrom.getNickname() + "[send for " + nickTo + "] " + msg);
-//                    nickFrom.sendMsg(nickFrom.getNickname() + "[send for " + nickTo + "] " + msg);
-//                }
-//            }
-//        }
-//    }
+    public boolean isNickBusy(String nick){
+        for (ClientHandler c : users){
+            if (c.getNickname().equals(nick)){
+                return true;
+            }
+        } return false;
+
+    }
+    public void sendPrivateMsg(ClientHandler nickFrom, String nickTo, String msg) {
+        for (ClientHandler c : users){
+            if (c.getNickname().equals(nickTo)){
+                if (!nickFrom.getNickname().equals(nickTo)){
+                    c.sendMsg(nickFrom.getNickname() + "[send for " + nickTo + "] " + msg);
+                    nickFrom.sendMsg(nickFrom.getNickname() + "[send for " + nickTo + "] " + msg);
+                }
+            }
+        }
+    }
 }

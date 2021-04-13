@@ -29,38 +29,38 @@ public class ClientHandler {
                         if (str.startsWith("/auth ")) {
                             String[] tokens = str.split(" ");
                             String nick = AuthService.getNicknameByLoginAndPassword(tokens[1], tokens[2]);
-//                            if (nick != null){
-//                                if (!server.isNickBusy(nick)){
-//                                    sendMsg("/auth-OK");
-//                                    setNickname(nick);
-//                                    server.subscribe(ClientHandler.this);
-//                                    break;
-//                                } else {
-//                                    sendMsg("nickname is busy");
-//                                }
-//
-//                            } else {
-//                                sendMsg("wrong login/password");
-//                            }
+                            if (nick != null){
+                                if (!server.isNickBusy(nick)){
+                                    sendMsg("/auth-OK");
+                                    setNickname(nick);
+                                    server.subscribe(ClientHandler.this);
+                                    break;
+                                } else {
+                                    sendMsg("nickname is busy");
+                                }
+
+                            } else {
+                                sendMsg("wrong login/password");
+                            }
                         }
                     }
-//                    while (true) {
-//                        String str = in.readUTF();
-//                        if (str.startsWith("/") || str.startsWith("@")) {
-//                            if ("/end".equals(str)){
-//                                out.writeUTF("/server closed");
-//                                System.out.printf("Client [%s] disconnected\n", socket.getInetAddress());
-//                                break;
-//                            } else if (str.startsWith("@")){
-//                                String[] tokens = str.split(" ", 2);
-//                                server.sendPrivateMsg(this, tokens[0].substring(1, tokens[0].length()), tokens[1]);
-//                            }
-//                        } else
-//                        {
-//                            server.broadcastMessage(nickname + ": " + str);
-//                        }
-//                        System.out.printf("Client [%s] — %s\n", socket.getInetAddress(), str);
-//                    }
+                    while (true) {
+                        String str = in.readUTF();
+                        if (str.startsWith("/") || str.startsWith("@")) {
+                            if ("/end".equals(str)){
+                                out.writeUTF("/server closed");
+                                System.out.printf("Client [%s] disconnected\n", socket.getInetAddress());
+                                break;
+                            } else if (str.startsWith("@")){
+                                String[] tokens = str.split(" ", 2);
+                                server.sendPrivateMsg(this, tokens[0].substring(1, tokens[0].length()), tokens[1]);
+                            }
+                        } else
+                        {
+                            server.broadcastMessage(nickname + ": " + str);
+                        }
+                        System.out.printf("Client [%s] — %s\n", socket.getInetAddress(), str);
+                    }
 
                 } catch (IOException e) {
                     e.printStackTrace();
