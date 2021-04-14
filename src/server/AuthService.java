@@ -3,40 +3,59 @@ package server;
 import java.sql.*;
 
 public class AuthService {
-    private static Connection connection; // соед с базой данных
-    private static Statement statement; // состояние соединения
+    private static Connection connection;
+    private static Statement statement;
 
-    public static void connect(){
+    public static void connect() {
         try {
-//резервируем класс, с кот. б. работать sqlite
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:main.db");
             statement = connection.createStatement();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 
-    public static String getNicknameByLoginAndPassword(String login, String password) {
-        String query = String.format("select nickname from users where login = '%s' and password = '%s'", login, password); //запрос
-
+    public static int addUser(String login, String pass, String nickname) {
         try {
-            ResultSet rs = statement.executeQuery(query);// отправляем запрос
-            if(rs.next()){
-                return rs.getString("nickname");
+            String query = "INSERT INTO users (login, password, nickname) VALUES (?, ?, ?);";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, login);
+            ps.setInt(2, pass.hashCode());
+            ps.setString(3, nickname);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static String getNicknameByLoginAndPass(String login, String pass) {
+        String query = String.format("select nickname, password from users where login='%s'", login);
+        try {
+            ResultSet rs = statement.executeQuery(query); // возвращает выборку через select
+            int myHash = pass.hashCode();
+            // кеш числа 12345
+            // изменим пароли в ДБ на хеш от строки pass1
+
+            if (rs.next()) {
+                String nick = rs.getString(1);
+                int dbHash = rs.getInt(2);
+                if (myHash == dbHash) {
+                    return nick;
+                }
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
-    public static void disconnect(){
+
+    public static void disconnect() {
         try {
             connection.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

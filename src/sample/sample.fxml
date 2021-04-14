@@ -4,50 +4,67 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?scenebuilder-stylesheet /styles/style.css?>
 
-<!--<GridPane fx:controller="sample.Controller"-->
-<!--          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">-->
-<!--</GridPane>-->
-
-<VBox alignment="TOP_CENTER" prefHeight="327.0" prefWidth="486.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<VBox alignment="center" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <stylesheets>
-<URL value="@/styles/style.css" />
+      <URL value="@/styles/style.css" />
    </stylesheets>
-
-   <HBox fx:id="upperPanel" alignment="CENTER" prefHeight="61.0" prefWidth="486.0">
-      <TextField fx:id="loginField" promptText="Login" HBox.hgrow="ALWAYS">
-         <HBox.margin>
-            <Insets left="22.0" right="11.0" />
-         </HBox.margin></TextField>
-      <PasswordField fx:id="passwordField" onAction="#tryToAuth" promptText="Password">
-         <HBox.margin>
-            <Insets left="11.0" right="11.0" />
-         </HBox.margin></PasswordField>
-      <Button onAction="#tryToAuth" text="Welcome!">
-         <HBox.margin>
-            <Insets left="11.0" right="22.0" />
-         </HBox.margin></Button>
-   </HBox>
    <children>
-      <TextArea fx:id="textArea" prefHeight="231.0" prefWidth="486.0">
-         <font>
-         </font></TextArea>
-      <HBox fx:id="bottomPanel" alignment="BOTTOM_CENTER" managed="false" prefHeight="98.0" prefWidth="486.0" visible="false">
+
+      <HBox fx:id="upperPanel" alignment="CENTER" prefHeight="83.0" prefWidth="829.0">
          <children>
-            <TextField fx:id="textField" onAction="#sendMsg" prefHeight="47.0" prefWidth="309.0" promptText="Enter your message...">
+            <TextField fx:id="loginField" promptText="Login" styleClass="field" HBox.hgrow="ALWAYS">
                <HBox.margin>
-                  <Insets bottom="22.0" top="22.0" />
-               </HBox.margin>
-               <font>
-               </font></TextField>
-            <Button fx:id="sendBtn" mnemonicParsing="false" onAction="#sendMsg" prefHeight="47.0" prefWidth="78.0" text="Send">
-               <font>
-               </font>
+                  <Insets left="66.0" />
+               </HBox.margin></TextField>
+            <PasswordField fx:id="passwordField" onAction="#tryToAuth" promptText="Password" styleClass="field">
                <HBox.margin>
-                  <Insets bottom="22.0" left="22.0" top="22.0" />
+                  <Insets left="10.0" />
+               </HBox.margin></PasswordField>
+            <Button onAction="#tryToAuth" styleClass="btn" text="Log in">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin></Button>
+            <Button mnemonicParsing="false" onAction="#logUp" styleClass="btn" text="Log up">
+               <HBox.margin>
+                  <Insets left="10.0" right="66.0" />
                </HBox.margin>
             </Button>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+
+      <HBox VBox.vgrow="ALWAYS">
+         <children>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <TextArea fx:id="chatArea" editable="false" minWidth="300.0" styleClass="field" VBox.vgrow="ALWAYS" />
+                  <HBox fx:id="bottomPanel" managed="false" visible="false">
+                     <children>
+                        <TextField fx:id="textField" onAction="#sendMsg" promptText="Enter message..." styleClass="field" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#sendMsg" styleClass="btn" text="Send" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+            <ListView fx:id="clientList" minWidth="100" onMouseClicked="#selectClient">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding></ListView>
+            <Label fx:id="userName" styleClass="userLogin" text="userName">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="11.0" right="11.0" top="11.0" />
+               </HBox.margin></Label>
          </children>
       </HBox>
    </children>

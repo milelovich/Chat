@@ -9,12 +9,13 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class Main extends Application {
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
         Parent root = loader.load();
-        primaryStage.setTitle("Chat");
-        primaryStage.setScene(new Scene(root, 500  , 300));
+        primaryStage.setTitle("Chat 2021");
+        primaryStage.setScene(new Scene(root, 600, 450));
         primaryStage.show();
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
