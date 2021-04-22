@@ -14,9 +14,8 @@ public class ClientHandler {
     private DataOutputStream out;
     private DataInputStream in;
     private String nickname;
-
-    // черный список у пользователя, а не у сервера
     List<String> blackList;
+    public List<String> forHistory;
 
     public ClientHandler(ConsoleServer server, Socket socket) {
         try {
@@ -24,11 +23,12 @@ public class ClientHandler {
             this.socket = socket;
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
-            this.blackList = new ArrayList<>();
+            this.blackList = AuthService.getBlackListByNickname(nickname);
 
             new Thread(() -> {
                 boolean isExit = false;
                 try {
+                    socket.setSoTimeout(10000);
                     while (true) {
                         String str = in.readUTF();
                         if (str.startsWith("/auth")){
@@ -38,6 +38,7 @@ public class ClientHandler {
                                 if (!server.isNickBusy(nick)) {
                                     sendMsg("/auth-OK");
                                     setNickname(nick);
+                                    socket.setSoTimeout(0);
                                     server.subscribe(ClientHandler.this);
                                     break;
                                 } else {
@@ -83,8 +84,21 @@ public class ClientHandler {
                                 // черный список для пользователя. но пока что только в рамках одного запуска программы
                                 if (str.startsWith("/blacklist ")) {
                                     String[] tokens = str.split(" ");
-                                    blackList.add(tokens[1]);
-                                    sendMsg("You added " + tokens[1] + " to blacklist");
+                                    if (AuthService.getBlackListByNickname(nickname).contains(tokens[1])){
+                                        if(AuthService.deleteFromBlackList(nickname, tokens[1]) == 1){
+                                            sendMsg("You delete " + tokens[1] + "from blacklist");
+                                        } else {
+                                            sendMsg("Something went wrong, it is impossible to delete");
+                                        }
+
+                                    } else {
+                                        if (AuthService.addToBlackList(nickname, tokens[1]) == 1){
+                                            blackList.add(tokens[1]);
+                                            sendMsg("You added " + tokens[1] + " to blacklist");
+                                        } else {
+                                            sendMsg("Something went wrong, it is impossible to add");
+                                        }
+                                    }
                                 }
                             } else {
                                 server.broadcastMessage(this, nickname +": " + str);
@@ -119,8 +133,11 @@ public class ClientHandler {
     }
 
     public void sendMsg(String msg) {
+       forHistory = new ArrayList<>();
+
         try {
             out.writeUTF(msg);
+            forHistory.add(msg);
         } catch (IOException e) {
             e.printStackTrace();
         }

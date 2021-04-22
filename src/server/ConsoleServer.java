@@ -77,10 +77,12 @@ public class ConsoleServer {
 
     public void sendPrivateMsg(ClientHandler nickFrom, String nickTo, String msg) {
         for (ClientHandler c : users) {
-            if (c.getNickname().equals(nickTo)) {
-                if (!nickFrom.getNickname().equals(nickTo)) {
-                    c.sendMsg(nickFrom.getNickname() + ": [Send for " + nickTo + "] " + msg);
-                    nickFrom.sendMsg(nickFrom.getNickname() + ": [Send for " + nickTo + "] " + msg);
+            if (!c.checkBlackList(nickFrom.getNickname())) {
+                if (c.getNickname().equals(nickTo)) {
+                    if (!nickFrom.getNickname().equals(nickTo)) {
+                        c.sendMsg(nickFrom.getNickname() + ": [Send for " + nickTo + "] " + msg);
+                        nickFrom.sendMsg(nickFrom.getNickname() + ": [Send for " + nickTo + "] " + msg);
+                    }
                 }
             }
         }

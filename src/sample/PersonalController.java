@@ -23,6 +23,7 @@ public class PersonalController {
         DataOutputStream out = ((MiniStage) btn.getScene().getWindow()).out;
         String nickTo = ((MiniStage) btn.getScene().getWindow()).nickTo;
         try {
+
             out.writeUTF("@" + nickTo + " " + textArea.getText());
         } catch (IOException e) {
             e.printStackTrace();

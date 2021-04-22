@@ -1,6 +1,8 @@
 package server;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AuthService {
     private static Connection connection;
@@ -50,6 +52,92 @@ public class AuthService {
         }
         return null;
     }
+
+    public static int addToBlackList(String owner, String blackClient){
+        PreparedStatement ps = null;
+        try{
+            ps = connection.prepareStatement("INSERT INTO blackList (owner, black) VALUES (?, ?)");
+            ps.setString(1, owner);
+            ps.setString(2, blackClient);
+            return ps.executeUpdate();
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            statementClose(ps);
+        } return 0;
+    }
+
+    public static int deleteFromBlackList(String owner, String blackClient){
+        PreparedStatement ps = null;
+        try{
+            ps = connection.prepareStatement("DELETE FROM blackList WHERE owner = ? AND black = ?");
+            ps.setString(1, owner);
+            ps.setString(2, blackClient);
+            return ps.executeUpdate();
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            statementClose(ps);
+        } return 0;
+    }
+
+    private static void statementClose(PreparedStatement ps) {
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<String> getBlackListByNickname(String nickname){
+        List<String> blackList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            ps = connection.prepareStatement("SELECT * FROM blackList WHERE owner = ?");
+            ps.setString(1, nickname);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                blackList.add(rs.getString(2));
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            resultSetClose(rs);
+            statementClose(ps);
+        } return blackList;
+    }
+
+//    public static List<String> history(String nickname){
+//        List<String> history = new ArrayList<>();
+//        PreparedStatement ps = null;
+//        ResultSet rs = null;
+//
+//        try {
+//            ps = connection.prepareStatement("INSERT INTO history (history) WHERE owner = ?");
+//            ps.setString(1, forHistory);
+//            rs = ps.executeQuery();
+//            while (rs.next()){
+//                history.add(rs.getString(2));
+//            }
+//        } catch (SQLException e){
+//            e.printStackTrace();
+//        } finally {
+//            resultSetClose(rs);
+//            statementClose(ps);
+//        } return history;
+//    }
+
+    private static void resultSetClose(ResultSet rs) {
+        try {
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     public static void disconnect() {
         try {
