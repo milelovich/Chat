@@ -8,9 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -122,7 +120,8 @@ public class Controller implements Initializable {
                         String str = in.readUTF();
                         if ("/auth-OK".equals(str)) {
                             setAuthorized(true);
-                            chatArea.clear();
+                           // chatArea.clear();
+                            loadHistory();
                             break;
                         } else {
                             for (TextArea ta : textAreas) {
@@ -149,6 +148,7 @@ public class Controller implements Initializable {
                             });
                         } else {
                             chatArea.appendText(str + "\n");
+                            saveHistory();
                         }
                     }
                 } catch (IOException e) {
@@ -203,6 +203,45 @@ public class Controller implements Initializable {
             MiniStage ms = new MiniStage(clientList.getSelectionModel().getSelectedItem(), out, textAreas);
             ms.show();
         }
+    }
+
+    private void saveHistory() throws IOException {
+        try {
+            File history = new File("history.txt");
+            if (!history.exists()) {
+                history.createNewFile();
+            }
+            PrintWriter fileWriter = new PrintWriter(new FileWriter(history, false));
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(chatArea.getText());
+            bufferedWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadHistory() throws IOException {
+        int posHistory = 100;
+        File history = new File("history.txt");
+        List<String> historyList = new ArrayList<>();
+        FileInputStream in = new FileInputStream(history);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+        String temp;
+        while ((temp = bufferedReader.readLine()) != null) {
+            historyList.add(temp);
+        }
+
+        if (historyList.size() > posHistory) {
+            for (int i = historyList.size() - posHistory; i <= (historyList.size() - 1); i++) {
+                chatArea.appendText(historyList.get(i) + "\n");
+            }
+        } else {
+            for (int i = 0; i < posHistory; i++) {
+                System.out.println(historyList.get(i));
+            }
+        }
+
     }
 
     @Override
